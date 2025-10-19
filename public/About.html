@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rare Explorer – About Us</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      line-height: 1.6;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 40px;
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header img {
+      height: 45px;
+      border-radius: 50%;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      transition: 0.3s;
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+
+    nav a:hover {
+      background: #334155;
+      color: #06b6d4;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h1, h2, h3 {
+      color: #06b6d4;
+    }
+
+    .about-section {
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+      margin-bottom: 40px;
+    }
+
+    .about-section img {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    footer {
+      background:#1e293b;
+      color:white;
+      padding:40px 20px;
+      border-top:1px solid #334155;
+    }
+
+    .footer-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px 0;
+      gap: 60px;
+    }
+
+    .footer-column {
+      flex: 0 1 auto; 
+      text-align: left; 
+      min-width: 250px;
+    }
+
+    .footer-column h3 {
+      color:#06b6d4;
+      margin-bottom:15px;
+    }
+
+    .social-icons a {
+      display: inline-block;
+      margin: 0 5px;
+      font-size: 1.2rem;
+      color:#06b6d4;
+      transition: 0.3s;
+    }
+    .social-icons img {
+        border-radius: 50%;
+    }
+    .social-icons a:hover {
+      color:#f59e0b;
+    }
+
+    .footer-description p {
+      font-size: 0.95rem;
+      color: #d1d5db;
+      max-width:300px;
+      margin:auto;
+    }
+
+    .contact-info p {
+      margin: 5px 0;
+    }
+
+    .contact-info a {
+      color:#06b6d4;
+      text-decoration: none;
+    }
+
+    .contact-info a:hover {
+      color:#f59e0b;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 900px) {
+      .footer-container {
+        flex-direction: column;
+        text-align: center;
+      }
+      .footer-column {
+        flex: 1 1 100%;
+        text-align: center;
+      }
+      .contact-info {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="Images/logo.jpg" alt="Rare Explorer Logo">
+    <nav>
+      <a href="Index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="UserSignup.html">Sign Up</a>
+      <a href="#">Book</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="about-section">
+      <img src="Images/logo.jpg" alt="Rare Explorer Adventures">
+      <h1>About Rare Explorer</h1>
+      <p>
+        Rare Explorer is your gateway to discovering the Philippines' most beautiful and hidden destinations. 
+        We specialize in creating unforgettable travel experiences that combine adventure, culture, and relaxation. 
+        Our mission is to bring travelers closer to nature and local heritage, offering trips that are unique, safe, and memorable.
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-container">
+        
+      <div class="footer-column" style="text-align:center;">
+        <h3>Follow Us</h3>
+        <div class="footer-description">
+          <p>Rare Explorer Travel & Tours helps you explore the Philippines’ hidden gems and beautiful destinations with safe, fun, and memorable travel experiences.</p>
+        </div>
+
+        <div class="social-icons" style="margin-bottom:10px;">
+            <a href="https://www.facebook.com/RaRe.explorer14/" target="_blank">
+                <img src="Images/facebook.jfif" alt="Facebook" style="width:30px; height:30px;">
+            </a>
+            <a href="https://tiktok.com/@raeexplor.trav" target="_blank">
+                <img src="Images/tiktok.png" alt="TikTok" style="width:30px; height:30px;">
+            </a>
+            <a href="https://instagram.com/rareexplorer.traveltours" target="_blank">
+                <img src="Images/download.jfif" alt="Instagram" style="width:30px; height:30px;">
+            </a>
+        </div>
+      </div>
+
+      <div class="footer-column contact-info">
+        <h3>Contact Us</h3>
+        <p><strong>Address:</strong> Quezon City, Philippines</p>
+        <p><strong>Mobile:</strong> 0915 009 1980</p>
+        <p><strong>Email:</strong> <a href="mailto:rareexplorer14@gmail.com">rareexplorer14@gmail.com</a></p>
+      </div>
+    </div>
+    <p style="text-align:center; font-size:0.9rem; margin-top:20px;">&copy; 2025 Rare Explorer Travel & Tours. All rights reserved.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Booking List – Rare Explorer</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #0f172a;
+      color: #fff;
+      padding: 20px;
+    }
+    .container { max-width: 1200px; margin: auto; }
+    .flex-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 15px;
+    }
+    .flex-header h2 { font-size: 22px; }
+    .search-bar { display: flex; gap: 10px; }
+    .search-bar input, .search-bar select {
+      padding: 8px 10px; border-radius: 6px; border: none; font-size: 14px;
+    }
+    .btn {
+      padding: 8px 14px; border: none; border-radius: 6px;
+      cursor: pointer; font-size: 14px; font-weight: bold;
+    }
+    .btn-primary { background: #38bdf8; color: #000; }
+    .table-wrapper {
+      background: #1e293b; border-radius: 12px; overflow-x: auto; margin-top: 20px;
+    }
+    .booking-table {
+      width: 100%; border-collapse: collapse; font-size: 14px; min-width: 800px;
+    }
+    .booking-table thead { background: #334155; color: #cbd5e1; }
+    .booking-table th, .booking-table td {
+      padding: 12px 16px; text-align: left; border-bottom: 1px solid #334155;
+    }
+    .booking-table tbody tr:hover { background: #475569; }
+    .client-info { display: flex; align-items: center; gap: 10px; }
+    .client-info img {
+      width: 35px; height: 35px; border-radius: 50%; object-fit: cover;
+    }
+    .status {
+      padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold;
+    }
+    .status.success { background: #16a34a; color: white; }
+    .status.pending { background: #facc15; color: black; }
+    .status.failed { background: #dc2626; color: white; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="flex-header">
+      <h2>Booking List</h2>
+      <div class="search-bar">
+        <input type="text" id="searchBooking" placeholder="Search bookings..." onkeyup="searchBookings()">
+        <select id="filterCity" onchange="applyFilters()">
+          <option value="">All Cities</option>
+          <option value="Aklan">Aklan</option>
+          <option value="Palawan">Palawan</option>
+          <option value="Hongkong">Hongkong</option>
+          <option value="Soul">South-Korea</option>
+          <option value="Tokyo">Tokyo</option>
+        </select>
+        <button class="btn btn-primary" onclick="exportCSV()">Export</button>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="booking-table">
+        <thead>
+          <tr>
+            <th>Client</th>
+            <th>Booking ID</th>
+            <th>Date</th>
+            <th>Package</th>
+            <th>City</th>
+            <th>Price</th>
+            <th>Email</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="bookingTableBody">
+          <!-- Firestore rows will render here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Firebase & Firestore -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB7PKVUrQcL-pEeOnn9XU9D3tgK90WkSU8",
+    authDomain: "travelbook-64c34.firebaseapp.com",
+    projectId: "travelbook-64c34",
+    storageBucket: "travelbook-64c34.appspot.com",
+    messagingSenderId: "964725351972",
+    appId: "1:964725351972:web:788b5e8361333723fa5ab1",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  let bookings = [];
+  let filteredBookings = [];
+
+  async function loadBookings() {
+    const querySnapshot = await getDocs(collection(db, "receipts"));
+    bookings = [];
+    querySnapshot.forEach((doc) => 
+      bookings.push({ id: doc.id, ...doc.data(), status: doc.data().status || "Pending" })
+    );
+    filteredBookings = [...bookings];
+    renderBookings(filteredBookings);
+  }
+
+  function renderBookings(arr) {
+    const tableBody = document.getElementById("bookingTableBody");
+    tableBody.innerHTML = arr.length === 0
+      ? "<tr><td colspan='8'>No bookings found.</td></tr>"
+      : "";
+
+    arr.forEach((b) => {
+      const statusClass =
+        b.status === "Paid" ? "success" :
+        b.status === "Pending" ? "pending" : "failed";
+
+      tableBody.innerHTML += `
+        <tr>
+          <td>
+            <div class="client-info">
+              <img src="${b.packageImage || 'Images/logo.jpg'}" alt="">
+              <span>${b.payerName}</span>
+            </div>
+          </td>
+          <td>${b.transactionId}</td>
+          <td>${new Date(b.date).toLocaleDateString()}</td>
+          <td>${b.packageName}</td>
+          <td>${b.city}</td>
+          <td>₱${Number(b.price).toLocaleString('en-PH', {minimumFractionDigits: 2})}</td>
+          <td>${b.payerEmail}</td>
+          <td><span class="status ${statusClass}">${b.status}</span></td>
+        </tr>
+      `;
+    });
+  }
+
+  // ✅ Combined Search + City Filter
+  function applyFilters() {
+    const searchQuery = document.getElementById("searchBooking").value.toLowerCase();
+    const city = document.getElementById("filterCity").value;
+
+    filteredBookings = bookings.filter(b =>
+      (city === "" || b.city === city) &&
+      (
+        b.payerName.toLowerCase().includes(searchQuery) ||
+        b.transactionId.toLowerCase().includes(searchQuery) ||
+        b.packageName.toLowerCase().includes(searchQuery) ||
+        b.city.toLowerCase().includes(searchQuery) ||
+        b.payerEmail.toLowerCase().includes(searchQuery)
+      )
+    );
+
+    renderBookings(filteredBookings);
+  }
+
+  function exportCSV() {
+    let csv = "Client,Booking ID,Date,Package,City,Price,Email,Status\n";
+    filteredBookings.forEach(b => {
+      csv += `"${b.payerName}","${b.transactionId}","${b.date}","${b.packageName}","${b.city}","${b.price}","${b.payerEmail}","${b.status}"\n`;
+    });
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.setAttribute("href", url);
+    a.setAttribute("download", "bookings.csv");
+    a.click();
+  }
+
+  // ✅ Event listeners
+  document.getElementById("searchBooking").addEventListener("keyup", applyFilters);
+  document.getElementById("filterCity").addEventListener("change", applyFilters);
+
+  loadBookings();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Rare Explorer – Travel Booking</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80") no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #fff;
+    }
+    .overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.75);
+      z-index: 1;
+    }
+    .login-container {
+      position: relative;
+      z-index: 2;
+      background: rgba(30, 41, 59, 0.9);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .logo {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      background: linear-gradient(to right, #06b6d4, #490bf5);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .tagline { font-size: 14px; margin-bottom: 25px; font-style: italic; }
+    .login-container h2 { margin-bottom: 20px; font-size: 24px; font-weight: bold; }
+    .input-group { margin-bottom: 18px; text-align: left; position: relative; }
+    .input-group label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: bold; color: #cbd5e1; }
+    .input-group input {
+      width: 100%; padding: 12px; border: none; border-radius: 10px;
+      font-size: 15px; background: #0f172a; color: white; outline: none;
+    }
+    .toggle-password {
+      position: absolute; right: 12px; top: 38px; cursor: pointer;
+      font-size: 14px; color: #38bdf8; user-select: none;
+    }
+    .btn {
+      width: 100%; padding: 12px; border: none; border-radius: 10px;
+      font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px;
+      transition: 0.3s; background: linear-gradient(to right, #06b6d4, #490bf5);
+      color: white; box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+    }
+    .btn:hover { transform: scale(1.03); opacity: 0.95; }
+    .extra-links { text-align: center; margin-top: 15px; font-size: 14px; }
+    .extra-links a { color: #38bdf8; text-decoration: none; cursor: pointer; }
+    .extra-links a:hover { text-decoration: underline; }
+    #message { margin-top: 15px; font-size: 14px; color: #f87171; min-height: 20px; }
+    .modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); z-index: 999; align-items: center; justify-content: center;
+    }
+    .modal-content {
+      background: #1e293b; padding: 25px; border-radius: 15px;
+      width: 90%; max-width: 350px; text-align: center; color: white;
+    }
+    .modal-content h3 { margin-bottom: 10px; }
+    .modal-content input {
+      width: 100%; padding: 10px; margin: 12px 0;
+      border: none; border-radius: 8px; background: #0f172a; color: white;
+    }
+    .btn.secondary { background: #64748b; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="login-container">
+    <div class="logo">Rare Explorer</div>
+    <p class="tagline">Your journey begins here ✈️</p>
+    <h2 id="form-title">Login</h2>
+    <form id="auth-form">
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" id="email" required>
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="password" required>
+        <span class="toggle-password" data-target="password">Show</span>
+      </div>
+      <div class="input-group" id="confirm-group" style="display:none;">
+        <label>Confirm Password</label>
+        <input type="password" id="confirm">
+        <span class="toggle-password" data-target="confirm">Show</span>
+      </div>
+      <button type="submit" class="btn" id="submit-btn">Login</button>
+    </form>
+    <div class="extra-links" id="extra-links">
+      <p id="toggle-text">Don’t have an account? <a id="toggle-link">Sign Up</a></p>
+      <p><a id="forgot-link">Forgot Password?</a></p>
+    </div>
+    <div id="message"></div>
+  </div>
+
+  <!-- Forgot Password Modal -->
+  <div id="forgot-modal" class="modal">
+    <div class="modal-content">
+      <h3>Reset Password</h3>
+      <p>Enter your email to receive a reset link:</p>
+      <input type="email" id="reset-email" required>
+      <button id="reset-btn" class="btn">Send Reset Link</button>
+      <button id="close-btn" class="btn secondary">Cancel</button>
+      <p id="reset-message"></p>
+    </div>
+  </div>
+
+  <!-- EmailJS v4 SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script type="module">
+  // --- Firebase ---
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import { 
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword, 
+    sendPasswordResetEmail, 
+    fetchSignInMethodsForEmail,
+    GoogleAuthProvider,
+    signInWithPopup
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB7PKVUrQcL-pEeOnn9XU9D3tgK90WkSU8",
+    authDomain: "travelbook-64c34.firebaseapp.com",
+    projectId: "travelbook-64c34",
+    storageBucket: "travelbook-64c34.appspot.com",
+    messagingSenderId: "964725351972",
+    appId: "1:964725351972:web:788b5e8361333723fa5ab1"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const googleProvider = new GoogleAuthProvider();
+
+  // --- EmailJS ---
+  emailjs.init({ publicKey: "kOgrbxu1e0qiwzkHC" });
+  const serviceID = "service_1vbw5mr";
+  const templateID = "template_tknxjvp";
+
+  // DOM elements
+  const form = document.getElementById("auth-form");
+  const formTitle = document.getElementById("form-title");
+  const submitBtn = document.getElementById("submit-btn");
+  const toggleLink = document.getElementById("toggle-link");
+  const toggleText = document.getElementById("toggle-text");
+  const message = document.getElementById("message");
+  const confirmGroup = document.getElementById("confirm-group");
+  const confirmInput = document.getElementById("confirm");
+  const googleBtn = document.getElementById("google-btn"); // Google login button
+
+  let isLogin = true;
+  let otpGroup, otpInput, sendCodeBtn, verifyBtn;
+  let pendingOTP, otpExpiry;
+
+  // --- OTP functions ---
+  function genCode() { return Math.floor(100000 + Math.random() * 900000).toString(); }
+
+  function ensureOtpUI() {
+    if (otpGroup) return;
+    otpGroup = document.createElement("div");
+    otpGroup.className = "input-group";
+    otpGroup.innerHTML = `
+      <label>Verification Code</label>
+      <input type="text" id="otp" maxlength="6" placeholder="Enter code">
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button type="button" id="send-code-btn" class="btn secondary">Send Code</button>
+        <button type="button" id="verify-code-btn" class="btn">Verify</button>
+      </div>
+      <div id="otp-msg" style="margin-top:8px;min-height:18px;"></div>`;
+    submitBtn.parentNode.insertBefore(otpGroup, submitBtn);
+    otpInput = document.getElementById("otp");
+    sendCodeBtn = document.getElementById("send-code-btn");
+    verifyBtn = document.getElementById("verify-code-btn");
+    sendCodeBtn.onclick = sendOtp;
+    verifyBtn.onclick = verifyOtp;
+  }
+
+  async function sendOtp() {
+    const email = document.getElementById("email").value.trim().toLowerCase();
+    if (!email) return showOtpMsg("Enter email first", true);
+    const code = genCode();
+    pendingOTP = code;
+    otpExpiry = Date.now() + 5*60*1000;
+    sessionStorage.setItem("otp", code);
+    sessionStorage.setItem("otp_exp", otpExpiry);
+    try {
+      sendCodeBtn.disabled = true;
+      sendCodeBtn.textContent = "Sending...";
+      await emailjs.send(serviceID, templateID, { to_email: email, code });
+      showOtpMsg("Code sent to your email", false);
+      setTimeout(() => {
+        sendCodeBtn.disabled = false;
+        sendCodeBtn.textContent = "Send Code";
+      }, 30000);
+    } catch(err) {
+      showOtpMsg("Failed to send", true);
+      sendCodeBtn.disabled = false;
+      sendCodeBtn.textContent = "Send Code";
+    }
+  }
+
+  function showOtpMsg(msg, isErr) {
+    const el = document.getElementById("otp-msg");
+    if (el) { el.style.color = isErr ? "#f87171" : "#4ade80"; el.textContent = msg; }
+  }
+
+  function verifyOtp() {
+    const input = otpInput.value;
+    const stored = sessionStorage.getItem("otp");
+    const exp = +sessionStorage.getItem("otp_exp");
+    if (!stored) return showOtpMsg("No code sent", true);
+    if (Date.now() > exp) return showOtpMsg("Code expired", true);
+    if (input === stored) {
+      sessionStorage.setItem("otp_verified", "1");
+      showOtpMsg("Verified!", false);
+    } else showOtpMsg("Incorrect code", true);
+  }
+
+  // --- Toggle login/signup ---
+  function toggleMode() {
+    isLogin = !isLogin;
+    if (isLogin) {
+      formTitle.textContent = "Login"; submitBtn.textContent = "Login";
+      toggleText.innerHTML = `Don’t have an account? <a id="toggle-link">Sign Up</a>`;
+      confirmGroup.style.display = "none";
+      if (otpGroup) { otpGroup.remove(); otpGroup = null; }
+    } else {
+      formTitle.textContent = "Sign Up"; submitBtn.textContent = "Sign Up";
+      toggleText.innerHTML = `Already have an account? <a id="toggle-link">Login</a>`;
+      confirmGroup.style.display = "block"; ensureOtpUI();
+    }
+    document.getElementById("toggle-link").onclick = toggleMode;
+    form.reset(); message.textContent = "";
+  }
+  toggleLink.onclick = toggleMode;
+
+  // --- Form submit (email/password) ---
+  form.onsubmit = async e => {
+    e.preventDefault();
+    const email = document.getElementById("email").value.trim().toLowerCase();
+    const password = document.getElementById("password").value;
+    try {
+      if (isLogin) {
+        await signInWithEmailAndPassword(auth, email, password);
+        message.style.color = "#4ade80"; message.textContent = "Login successful!";
+        setTimeout(() => location.href = "Userpage.html", 1000);
+      } else {
+        if (password !== confirmInput.value) { message.textContent = "⚠ Passwords do not match."; return; }
+        if (!sessionStorage.getItem("otp_verified")) { message.textContent = "⚠ Verify your email first."; return; }
+        await createUserWithEmailAndPassword(auth, email, password);
+        message.style.color = "#4ade80"; message.textContent = "🎉 Account created!";
+        sessionStorage.clear(); setTimeout(toggleMode, 1200);
+      }
+    } catch(err) {
+      message.style.color = "#f87171"; message.textContent = "⚠ " + err.message;
+    }
+  };
+
+  // --- Forgot password ---
+  const forgotLink = document.getElementById("forgot-link");
+  const forgotModal = document.getElementById("forgot-modal");
+  const resetBtn = document.getElementById("reset-btn");
+  const closeBtn = document.getElementById("close-btn");
+  const resetEmail = document.getElementById("reset-email");
+  const resetMsg = document.getElementById("reset-message");
+
+  forgotLink.onclick = () => { forgotModal.style.display = "flex"; resetMsg.textContent = ""; };
+  closeBtn.onclick = () => forgotModal.style.display = "none";
+  resetBtn.onclick = async () => {
+    if (!resetEmail.value) { resetMsg.style.color = "#f87171"; resetMsg.textContent = "Enter email"; return; }
+    const email = resetEmail.value.trim().toLowerCase();
+    try {
+      const methods = await fetchSignInMethodsForEmail(auth, email);
+      if (methods.length === 0) { resetMsg.style.color = "#f87171"; resetMsg.textContent = "⚠ No account found with this email."; return; }
+      if (!methods.includes("password")) {
+        resetMsg.style.color = "#f87171";
+        resetMsg.textContent = "⚠ This account uses Google/Facebook login. Use that to sign in.";
+        return;
+      }
+      await sendPasswordResetEmail(auth, email);
+      resetMsg.style.color = "#4ade80"; resetMsg.textContent = "Reset email sent!";
+    } catch(err) {
+      resetMsg.style.color = "#f87171"; resetMsg.textContent = "⚠ " + err.message;
+    }
+  };
+
+  // --- Show/Hide password ---
+  document.querySelectorAll(".toggle-password").forEach(btn => {
+    btn.onclick = () => {
+      const target = document.getElementById(btn.dataset.target);
+      target.type = target.type === "password" ? "text" : "password";
+      btn.textContent = target.type === "password" ? "Show" : "Hide";
+    };
+  });
+
+  // --- Google Sign-In ---
+  googleBtn.onclick = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      console.log("Google user:", user);
+      message.style.color = "#4ade80";
+      message.textContent = `Welcome, ${user.displayName || user.email}`;
+      setTimeout(() => location.href = "Userpage.html", 1000);
+    } catch(err) {
+      console.error(err);
+      message.style.color = "#f87171";
+      message.textContent = "⚠ " + err.message;
+    }
+  };
+</script>
+
+
+
+</body>
+</html>
