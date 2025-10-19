@@ -1,33 +1,451 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Page Not Found</title>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rare Explorer – Travel Packages</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
 
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px 16px; border-radius: 3px; }
-      #message h3 { color: #888; font-weight: normal; font-size: 16px; margin: 16px 0 12px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
+  body {
+    color: #1c1c1c;
+    background: #0f172a;
+  }
+
+  /* Navbar */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    background: #1e293b;;
+    color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  nav a {
+    color: #ffffff;
+    margin-left: 25px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+  nav a:hover {
+    color: #06b6d4;
+  }
+
+  /* Hero Section */
+  .hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 75vh;
+    background: url('Images/Boracay 1.jpg') center/cover no-repeat;
+    color: #ffffff;
+  }
+  .hero h1 {
+    font-size: 50px;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+  }
+  .hero p {
+    margin: 10px 0 20px;
+    font-size: 20px;
+  }
+  .hero button {
+    background: #06b6d4;
+    color: #ffffff;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .hero button:hover {
+    background: #0891b2;
+  }
+
+  /* Locations */
+  .locations {
+    padding: 60px 50px;
+    text-align: center;
+  }
+  .locations h2 {
+    margin-bottom: 30px;
+    font-size: 32px;
+    color: #fff;
+  }
+  .location-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  .card {
+    width: 240px;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: 0.3s;
+  }
+  .card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+  }
+  .card:hover {
+    transform: scale(1.05);
+  }
+  .card .info {
+    padding: 12px;
+  }
+  .card .info h3 {
+    margin-bottom: 5px;
+  }
+
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+  }
+  .modal-content {
+    display: flex;
+    gap: 20px;
+    background: #1e293b;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    width: 85%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal img {
+    width: 40%;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+  .modal-info {
+    flex: 1;
+  }
+  .modal h2 {
+    color: #06b6d4;
+    margin-bottom: 10px;
+  }
+  .modal h3 {
+    color: #00e0ff;
+    margin-top: 15px;
+    margin-bottom: 8px;
+  }
+  .highlight-tags span {
+    display: inline-block;
+    background: #374151;
+    color: #ffffff;
+    padding: 5px 10px;
+    border-radius: 8px;
+    margin: 5px 5px 0 0;
+  }
+  .close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #ffffff;
+    font-size: 28px;
+    cursor: pointer;
+  }
+
+  /* Footer */
+     footer {
+      background:#1e293b;
+      color:white;
+      padding:40px 20px;
+      border-top:1px solid #334155;
+    }
+
+    .footer-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px 0;
+      gap: 60px;
+    }
+
+    .footer-column {
+      flex: 0 1 auto; 
+      text-align: left; 
+      min-width: 250px;
+    }
+
+    .footer-column h3 {
+      color:#06b6d4;
+      margin-bottom:15px;
+    }
+
+.social-icons a {
+  display: inline-block;
+  margin: 0 5px;
+  font-size: 1.2rem;
+  color: #06b6d4;
+  transition: 0.3s;
+  background: transparent; /* Ensure the background is transparent */
+}
+
+.social-icons img {
+  border-radius: 50%;
+  background: transparent; /* Remove any background behind the image */
+}
+
+.social-icons a:hover {
+  color: #f59e0b;
+  background: transparent; /* Keep hover background transparent */
+}
+
+
+    .footer-description p {
+      font-size: 0.95rem;
+      color: white;
+      max-width:300px;
+      margin:auto;
+    }
+
+    .contact-info p {
+      margin: 5px 0;
+    }
+
+    .contact-info a {
+      color:#06b6d4;
+      text-decoration: none;
+    }
+
+    .contact-info a:hover {
+      color:#f59e0b;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 900px) {
+      .footer-container {
+        flex-direction: column;
+        text-align: center;
       }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>404</h2>
-      <h1>Page Not Found</h1>
-      <p>The specified file was not found on this website. Please check the URL for mistakes and try again.</p>
-      <h3>Why am I seeing this?</h3>
-      <p>This page was generated by the Firebase Command-Line Interface. To modify it, edit the <code>404.html</code> file in your project's configured <code>public</code> directory.</p>
+      .footer-column {
+        flex: 1 1 100%;
+        text-align: center;
+      }
+      .contact-info {
+        text-align: center;
+      }
+    }
+</style>
+
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <div class="logo" style="display:flex; align-items:center;">
+      <img src="Images/logo.jpg" alt="Globe Logo" 
+           style="height:40px; width:40px; border-radius:50%; border:2px solid white; margin-right:10px; object-fit:cover;">
+      <span style="font-size:22px; font-weight:bold; color:white;">RareExplorer Travel & Tours</span>
     </div>
-  </body>
+    <nav>
+      <a href="Index.html">Home</a>
+      <a href="About.html">About</a>
+      <a href="UserSignup.html">Sign Up</a>
+      <a href="#">Book</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div>
+      <h1>Explore the World with RareExplorer</h1>
+      <p>Discover hidden gems, iconic cities, and cultural adventures at the best prices.</p>
+      <button onclick="openModal('boracay')">View Package</button>
+    </div>
+  </section>
+
+  <!-- Locations -->
+  <section class="locations">
+    <h2>Top Destinations</h2>
+    <div class="location-cards">
+      <div class="card" onclick="openModal('boracay')">
+        <img src="Images/Boracay_.jpg" alt="Boracay">
+        <div class="info"><h3>Boracay</h3><p>White Beach Paradise</p></div>
+      </div>
+      <div class="card" onclick="openModal('elnido')">
+        <img src="Images/Elnido.jpg" alt="El Nido">
+        <div class="info"><h3>El Nido</h3><p>Island Hopping Adventure</p></div>
+      </div>
+      <div class="card" onclick="openModal('hongkong')">
+        <img src="Images/Hongkong_.jpg" alt="Hong Kong">
+        <div class="info"><h3>Hong Kong</h3><p>City Lights & Disneyland</p></div>
+      </div>
+      <div class="card" onclick="openModal('japan')">
+        <img src="Images/Japan.jpg" alt="Japan">
+        <div class="info"><h3>Japan</h3><p>Tradition Meets Technology</p></div>
+      </div>
+      <div class="card" onclick="openModal('korea')">
+        <img src="Images/South Korea.jpg" alt="South Korea">
+        <div class="info"><h3>South Korea</h3><p>Palaces & K-Pop</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Boracay -->
+  <div id="boracay" class="modal">
+    <span class="close" onclick="closeModal('boracay')">&times;</span>
+    <div class="modal-content">
+      <img src="Images/Boracay_.jpg" alt="Boracay">
+      <div class="modal-info">
+        <h2>Boracay Travel Package</h2>
+        <h3>Price</h3><p>₱12,500 per person</p>
+        <h3>Duration</h3><p>3 Days 2 Nights</p>
+        <h3>Highlights</h3>
+        <div class="highlight-tags">
+          <span>Accommodation</span><span>Breakfast</span><span>Island Hopping</span>
+          <span>Airport Transfer</span><span>Tour Guide</span>
+        </div>
+        <h3>Activities</h3>
+        <p>Parasailing, kite surfing, paddle boarding, cliff diving, scuba diving, snorkeling.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- El Nido -->
+  <div id="elnido" class="modal">
+    <span class="close" onclick="closeModal('elnido')">&times;</span>
+    <div class="modal-content">
+      <img src="Images/Elnido.jpg" alt="El Nido">
+      <div class="modal-info">
+        <h2>El Nido Travel Package</h2>
+        <h3>Price</h3><p>₱15,000 per person</p>
+        <h3>Duration</h3><p>4 Days 3 Nights</p>
+        <h3>Highlights</h3>
+        <div class="highlight-tags">
+          <span>Accommodation</span><span>Breakfast</span><span>Island Hopping</span>
+          <span>Snorkeling</span><span>Kayaking</span>
+        </div>
+        <h3>Activities</h3>
+        <p>Snorkeling, kayaking, beach hopping, sunset viewing, local dining experience.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hong Kong -->
+  <div id="hongkong" class="modal">
+    <span class="close" onclick="closeModal('hongkong')">&times;</span>
+    <div class="modal-content">
+      <img src="Images/Hongkong_.jpg" alt="Hong Kong">
+      <div class="modal-info">
+        <h2>Hong Kong Travel Package</h2>
+        <h3>Price</h3><p>₱20,000 per person</p>
+        <h3>Duration</h3><p>5 Days 4 Nights</p>
+        <h3>Highlights</h3>
+        <div class="highlight-tags">
+          <span>Accommodation</span><span>Breakfast</span><span>City Tour</span>
+          <span>Disneyland Ticket</span><span>Airport Transfer</span>
+        </div>
+        <h3>Activities</h3>
+        <p>City tour, Disneyland visit, Victoria Peak, shopping, night markets, local cuisine tasting.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Japan -->
+  <div id="japan" class="modal">
+    <span class="close" onclick="closeModal('japan')">&times;</span>
+    <div class="modal-content">
+      <img src="Images/Japan.jpg" alt="Japan">
+      <div class="modal-info">
+        <h2>Japan Travel Package</h2>
+        <h3>Price</h3><p>₱45,000 per person</p>
+        <h3>Duration</h3><p>7 Days 6 Nights</p>
+        <h3>Highlights</h3>
+        <div class="highlight-tags">
+          <span>Accommodation</span><span>Breakfast</span><span>Shinkansen Pass</span>
+          <span>City Tours</span><span>Cultural Experience</span>
+        </div>
+        <h3>Activities</h3>
+        <p>City sightseeing, temple visits, sushi making class, cherry blossom tour, shopping, theme parks.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- South Korea -->
+  <div id="korea" class="modal">
+    <span class="close" onclick="closeModal('korea')">&times;</span>
+    <div class="modal-content">
+      <img src="Images/South Korea.jpg" alt="South Korea">
+      <div class="modal-info">
+        <h2>South Korea Travel Package</h2>
+        <h3>Price</h3><p>₱35,000 per person</p>
+        <h3>Duration</h3><p>6 Days 5 Nights</p>
+        <h3>Highlights</h3>
+        <div class="highlight-tags">
+          <span>Accommodation</span><span>Breakfast</span><span>City Tour</span>
+          <span>Palace Visits</span><span>K-Pop Experience</span>
+        </div>
+        <h3>Activities</h3>
+        <p>Palace and cultural tours, K-pop dance experience, shopping in Myeongdong, Korean BBQ tasting, N Seoul Tower visit.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+        
+      <div class="footer-column" style="text-align:center;">
+        <h3>Follow Us</h3>
+        <div class="footer-description">
+          <p>Rare Explorer Travel & Tours helps you explore the Philippines’ hidden gems and beautiful destinations with safe, fun, and memorable travel experiences.</p>
+        </div>
+
+        <div class="social-icons" style="margin-bottom:10px;">
+            <a href="https://www.facebook.com/RaRe.explorer14/" target="_blank">
+                <img src="Images/facebook.jfif" alt="Facebook" style="width:30px; height:30px;">
+            </a>
+            <a href="https://tiktok.com/@raeexplor.trav" target="_blank">
+                <img src="Images/tiktok.png" alt="TikTok" style="width:30px; height:30px;">
+            </a>
+            <a href="https://instagram.com/rareexplorer.traveltours" target="_blank">
+                <img src="Images/download.jfif" alt="Instagram" style="width:30px; height:30px;">
+            </a>
+        </div>
+      </div>
+
+      <div class="footer-column contact-info">
+        <h3>Contact Us</h3>
+        <p><strong>Address:</strong> Quezon City, Philippines</p>
+        <p><strong>Mobile:</strong> 0915 009 1980</p>
+        <p><strong>Email:</strong> <a href="mailto:rareexplorer14@gmail.com">rareexplorer14@gmail.com</a></p>
+      </div>
+    </div>
+    <p style="text-align:center; font-size:0.9rem; margin-top:20px;">&copy; 2025 Rare Explorer Travel & Tours. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+  </script>
+
+</body>
 </html>
