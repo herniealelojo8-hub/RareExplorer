@@ -23,7 +23,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 15px 50px;
-    background: #1e293b;;
+    background: #1e293b;
     color: #ffffff;
     position: sticky;
     top: 0;
@@ -47,7 +47,7 @@
     align-items: center;
     text-align: center;
     height: 75vh;
-    background: url('Images/Boracay 1.jpg') center/cover no-repeat;
+    background: url('Images/Boracay_1.jpg') center/cover no-repeat;
     color: #ffffff;
   }
   .hero h1 {
@@ -171,90 +171,88 @@
   }
 
   /* Footer */
-     footer {
-      background:#1e293b;
-      color:white;
-      padding:40px 20px;
-      border-top:1px solid #334155;
-    }
+  footer {
+    background:#1e293b;
+    color:white;
+    padding:40px 20px;
+    border-top:1px solid #334155;
+  }
 
+  .footer-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px 0;
+    gap: 60px;
+  }
+
+  .footer-column {
+    flex: 0 1 auto; 
+    text-align: left; 
+    min-width: 250px;
+  }
+
+  .footer-column h3 {
+    color:#06b6d4;
+    margin-bottom:15px;
+  }
+
+  .social-icons a {
+    display: inline-block;
+    margin: 0 5px;
+    font-size: 1.2rem;
+    color: #06b6d4;
+    transition: 0.3s;
+    background: transparent;
+  }
+
+  .social-icons img {
+    border-radius: 50%;
+    background: transparent;
+  }
+
+  .social-icons a:hover {
+    color: #f59e0b;
+    background: transparent;
+  }
+
+  .footer-description p {
+    font-size: 0.95rem;
+    color: white;
+    max-width:300px;
+    margin:auto;
+  }
+
+  .contact-info p {
+    margin: 5px 0;
+  }
+
+  .contact-info a {
+    color:#06b6d4;
+    text-decoration: none;
+  }
+
+  .contact-info a:hover {
+    color:#f59e0b;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 900px) {
     .footer-container {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      max-width: 1200px;
-      margin: auto;
-      padding: 20px 0;
-      gap: 60px;
+      flex-direction: column;
+      text-align: center;
     }
-
     .footer-column {
-      flex: 0 1 auto; 
-      text-align: left; 
-      min-width: 250px;
+      flex: 1 1 100%;
+      text-align: center;
     }
-
-    .footer-column h3 {
-      color:#06b6d4;
-      margin-bottom:15px;
+    .contact-info {
+      text-align: center;
     }
-
-.social-icons a {
-  display: inline-block;
-  margin: 0 5px;
-  font-size: 1.2rem;
-  color: #06b6d4;
-  transition: 0.3s;
-  background: transparent; /* Ensure the background is transparent */
-}
-
-.social-icons img {
-  border-radius: 50%;
-  background: transparent; /* Remove any background behind the image */
-}
-
-.social-icons a:hover {
-  color: #f59e0b;
-  background: transparent; /* Keep hover background transparent */
-}
-
-
-    .footer-description p {
-      font-size: 0.95rem;
-      color: white;
-      max-width:300px;
-      margin:auto;
-    }
-
-    .contact-info p {
-      margin: 5px 0;
-    }
-
-    .contact-info a {
-      color:#06b6d4;
-      text-decoration: none;
-    }
-
-    .contact-info a:hover {
-      color:#f59e0b;
-      text-decoration: underline;
-    }
-
-    @media (max-width: 900px) {
-      .footer-container {
-        flex-direction: column;
-        text-align: center;
-      }
-      .footer-column {
-        flex: 1 1 100%;
-        text-align: center;
-      }
-      .contact-info {
-        text-align: center;
-      }
-    }
+  }
 </style>
-
 </head>
 <body>
 
@@ -287,7 +285,7 @@
     <h2>Top Destinations</h2>
     <div class="location-cards">
       <div class="card" onclick="openModal('boracay')">
-        <img src="Images/Boracay_.jpg" alt="Boracay">
+        <img src="Images/Boracay.jpg" alt="Boracay">
         <div class="info"><h3>Boracay</h3><p>White Beach Paradise</p></div>
       </div>
       <div class="card" onclick="openModal('elnido')">
@@ -295,7 +293,7 @@
         <div class="info"><h3>El Nido</h3><p>Island Hopping Adventure</p></div>
       </div>
       <div class="card" onclick="openModal('hongkong')">
-        <img src="Images/Hongkong_.jpg" alt="Hong Kong">
+        <img src="Images/Hongkong.jpg" alt="Hong Kong">
         <div class="info"><h3>Hong Kong</h3><p>City Lights & Disneyland</p></div>
       </div>
       <div class="card" onclick="openModal('japan')">
@@ -303,17 +301,17 @@
         <div class="info"><h3>Japan</h3><p>Tradition Meets Technology</p></div>
       </div>
       <div class="card" onclick="openModal('korea')">
-        <img src="Images/South Korea.jpg" alt="South Korea">
+        <img src="Images/South_Korea.jpg" alt="South Korea">
         <div class="info"><h3>South Korea</h3><p>Palaces & K-Pop</p></div>
       </div>
     </div>
   </section>
 
-  <!-- Boracay -->
+  <!-- Modals -->
   <div id="boracay" class="modal">
     <span class="close" onclick="closeModal('boracay')">&times;</span>
     <div class="modal-content">
-      <img src="Images/Boracay_.jpg" alt="Boracay">
+      <img src="Images/Boracay.jpg" alt="Boracay">
       <div class="modal-info">
         <h2>Boracay Travel Package</h2>
         <h3>Price</h3><p>₱12,500 per person</p>
@@ -329,7 +327,6 @@
     </div>
   </div>
 
-  <!-- El Nido -->
   <div id="elnido" class="modal">
     <span class="close" onclick="closeModal('elnido')">&times;</span>
     <div class="modal-content">
@@ -349,11 +346,10 @@
     </div>
   </div>
 
-  <!-- Hong Kong -->
   <div id="hongkong" class="modal">
     <span class="close" onclick="closeModal('hongkong')">&times;</span>
     <div class="modal-content">
-      <img src="Images/Hongkong_.jpg" alt="Hong Kong">
+      <img src="Images/Hongkong.jpg" alt="Hong Kong">
       <div class="modal-info">
         <h2>Hong Kong Travel Package</h2>
         <h3>Price</h3><p>₱20,000 per person</p>
@@ -369,7 +365,6 @@
     </div>
   </div>
 
-  <!-- Japan -->
   <div id="japan" class="modal">
     <span class="close" onclick="closeModal('japan')">&times;</span>
     <div class="modal-content">
@@ -389,11 +384,10 @@
     </div>
   </div>
 
-  <!-- South Korea -->
   <div id="korea" class="modal">
     <span class="close" onclick="closeModal('korea')">&times;</span>
     <div class="modal-content">
-      <img src="Images/South Korea.jpg" alt="South Korea">
+      <img src="Images/South_Korea.jpg" alt="South Korea">
       <div class="modal-info">
         <h2>South Korea Travel Package</h2>
         <h3>Price</h3><p>₱35,000 per person</p>
@@ -412,22 +406,20 @@
   <!-- Footer -->
   <footer>
     <div class="footer-container">
-        
       <div class="footer-column" style="text-align:center;">
         <h3>Follow Us</h3>
         <div class="footer-description">
           <p>Rare Explorer Travel & Tours helps you explore the Philippines’ hidden gems and beautiful destinations with safe, fun, and memorable travel experiences.</p>
         </div>
-
         <div class="social-icons" style="margin-bottom:10px;">
             <a href="https://www.facebook.com/RaRe.explorer14/" target="_blank">
-                <img src="Images/facebook.jfif" alt="Facebook" style="width:30px; height:30px;">
+                <img src="Images/facebook.png" alt="Facebook" style="width:30px; height:30px;">
             </a>
             <a href="https://tiktok.com/@raeexplor.trav" target="_blank">
                 <img src="Images/tiktok.png" alt="TikTok" style="width:30px; height:30px;">
             </a>
             <a href="https://instagram.com/rareexplorer.traveltours" target="_blank">
-                <img src="Images/download.jfif" alt="Instagram" style="width:30px; height:30px;">
+                <img src="Images/instagram.png" alt="Instagram" style="width:30px; height:30px;">
             </a>
         </div>
       </div>
