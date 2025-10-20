@@ -1,3 +1,3 @@
-Member: Red Hernie B. Alelojo
+Member: Red Hernie B. Alelojo,
         Chrisdelyn S. Wong
         
